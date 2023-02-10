@@ -22,7 +22,10 @@ export async function handle({ event, resolve }: any) {
         },
         post: async (endpoint: string, payload: any) => {
             return await fletch(endpoint, 'POST', payload)
-        }
+        },
+        patch: async (endpoint: string, payload: any) => {
+            return await fletch(endpoint, 'PATCH', payload)
+        },
     }
     return await resolve(event);
 }

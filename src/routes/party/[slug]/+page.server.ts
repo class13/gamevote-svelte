@@ -40,5 +40,17 @@ export const actions = {
         data = Object.fromEntries(data.entries())
         await locals.api.post(`/parties/${params.slug}/options` , {value: data.option})
         throw redirect(302, `/party/${params.slug}`)
+    },
+    startVoting: async ({locals, params}: Params) => {
+        await locals.api.patch(`/parties/${params.slug}` , {status: "VOTING"})
+        throw redirect(302, `/party/${params.slug}`)
+    },
+    startNomination: async ({locals, params}: Params) => {
+        await locals.api.patch(`/parties/${params.slug}` , {status: "NOMINATION"})
+        throw redirect(302, `/party/${params.slug}`)
+    },
+    startResults: async ({locals, params}: Params) => {
+        await locals.api.patch(`/parties/${params.slug}` , {status: "RESULTS"})
+        throw redirect(302, `/party/${params.slug}`)
     }
 }
