@@ -30,9 +30,9 @@ export async function load({params, locals, cookies}: Params) {
 // todo: implement starting of vote
 
 // todo: implement voting <
+// todo: implement showing of poll
 
 // todo: implement a socket to connect to, to get a live option and attendee list
-// todo: when entering a party first time need to register always
 // todo: include party in payload of jwt token (otherwise it might be used in another party)
 export const actions = {
     addOption: async ({locals, params, request}: Params) => {
