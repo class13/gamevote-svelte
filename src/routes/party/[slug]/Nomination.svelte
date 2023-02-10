@@ -42,11 +42,6 @@
 <style>
     .nomination {
         min-width: 600px;
-        min-height: 600px;
-        background: #121212;
-        color: white;
-        border: 1px solid gray;
-        padding: 25px;
     }
 
     .nomination > .title {
