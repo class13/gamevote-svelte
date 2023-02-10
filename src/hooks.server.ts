@@ -26,6 +26,9 @@ export async function handle({ event, resolve }: any) {
         patch: async (endpoint: string, payload: any) => {
             return await fletch(endpoint, 'PATCH', payload)
         },
+        put: async (endpoint: string, payload: any) => {
+            return await fletch(endpoint, 'PUT', payload)
+        },
     }
     return await resolve(event);
 }

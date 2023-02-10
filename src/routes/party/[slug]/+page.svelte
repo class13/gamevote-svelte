@@ -1,5 +1,6 @@
 <script>
     import Nomination from "./Nomination.svelte";
+    import Voting from "./Voting.svelte";
     export let data
 </script>
 
@@ -10,5 +11,9 @@
         <button formaction="?/startResults">Results</button>
     </form>
     <span>Status {data.party.status}</span>
+    {#if data.party.status === "NOMINATION"}
     <Nomination/>
+    {:else if data.party.status === "VOTING"}
+    <Voting/>
+    {/if}
 </div>

@@ -1,29 +1,68 @@
 <script lang="ts">
     import { page } from '$app/stores';
     export let data
+
+    export let options = $page.data.poll.options.map(it => {
+        return {
+            upvote: false,
+            downvote: false,
+            name: it,
+            upvoteElementId: `upvote-${it}`,
+            downvoteElementId: `downvote-${it}`
+        }
+    })
 </script>
 <div class="voting">
     <h2 class="title">My LAN-Party</h2>
-    <span>Hello {$page.data.username}</span>
-    <div class="double-container">
-        <div>
-            Attendees
+    {#if $page.data.isUserVoting}
+        <form action="?/vote" method="POST">
             <ul>
-                {#each $page.data.party.attendees as attendee}
-                    <li>{attendee}</li>
+                {#each options as option}
+                    <li>
+                        <span>{option.name}</span>
+                        <div>
+                            <label for="{option.upvoteElementId}" class:selected="{option.upvote}">👍 </label>
+
+                            <input type="checkbox" name="{option.upvoteElementId}" id="{option.upvoteElementId}" bind:checked={option.upvote} on:change={e => { if (e.target.value) option.downvote = false }}>
+                            <label for="{option.downvoteElementId}" class:selected="{option.downvote}">👎</label>
+
+                            <input type="checkbox" name="{option.downvoteElementId}" id="{option.downvoteElementId}" bind:checked={option.downvote} on:change={e => { if (e.target.value) option.upvote = false }}>
+                        </div>
+                    </li>
                 {/each}
             </ul>
-        </div>
-        <div>
-            Options
-            <ul>
-                {#each $page.data.party.options as option}
-                    <li>{option}</li>
-                {/each}
-                <form on:keydown={onKeydownAttendee} action="?/addOption" method="POST">
-                    <input name="option" type="text" bind:value={option} bind:this={optionInput} autofocus >
-                </form>
-            </ul>
-        </div>
-    </div>
+            <button type="submit">Vote</button>
+        </form>
+    {:else}
+
+    {/if}
 </div>
+<style>
+    label {
+        display: inline-block;
+        background: rgb(255, 255, 255, 5%);
+        padding: 2px 4px;
+        border-radius: 5px;
+        border: 1px solid rgb(255, 255, 255, 5%);
+    }
+    label.selected {
+        background: rgb(255, 255, 255, 10%);
+        border: 1px solid gray;
+    }
+    input {
+        display: none;
+    }
+    ul {
+        display: table;
+    }
+    li {
+        display: table-row;
+    }
+    li > span {
+        display: table-cell;
+        min-width: 150px;
+        justify-content: center;
+    }
+
+
+</style>
