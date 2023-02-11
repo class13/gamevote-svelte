@@ -1,6 +1,16 @@
 import * as jose from "jose";
 import {redirect} from "@sveltejs/kit";
 
+type HypermediaContent = {
+    "_links"?: {
+        [name: string]: {
+            href: string
+        }
+    },
+    links?: {
+        [name: string]: () => Promise<any>
+    }
+}
 export async function handle({ event, resolve }: any) {
     const apiHost = "http://localhost:8080"
 
@@ -15,6 +25,7 @@ export async function handle({ event, resolve }: any) {
         });
         return await response.json()
     }
+    // todo: create types for those libs
     event.locals.api = {
         fetch: fletch,
         get: async (endpoint: string) => {
@@ -29,6 +40,16 @@ export async function handle({ event, resolve }: any) {
         put: async (endpoint: string, payload: any) => {
             return await fletch(endpoint, 'PUT', payload)
         },
+    }
+    event.locals.hypermedia = {
+        hydrate: (data: HypermediaContent) => {
+            if (data._links == null) return {}
+            return Object.fromEntries(
+                Object.entries(data._links).map(it => {
+                    return [it[0], () => event.locals.api.get(it[1].href)]
+                })
+            )
+        }
     }
     return await resolve(event);
 }

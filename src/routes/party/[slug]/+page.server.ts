@@ -4,7 +4,7 @@ import * as jose from 'jose'
 type Params = {
     params: {slug: number},
     request: any,
-    locals: {api: any, username: string},
+    locals: {api: any, username: string, hypermedia: any},
 
     cookies: any
 }
@@ -38,6 +38,18 @@ export async function load({params, locals, cookies}: Params) {
         response.poll = poll
         response.outstanding = outstanding
         response.isUserVoting = outstanding.includes(username)
+        console.log(poll)
+        let hydratedPoll = locals.hypermedia.hydrate(poll)
+        console.log(hydratedPoll)
+        if (hydratedPoll.results) {
+            let results = await hydratedPoll.results()
+            response.results = Object.entries(results).map(it => {
+                return {
+                    option: it[0],
+                    votes: it[1]
+                }
+            })
+        }
     }
 
 
