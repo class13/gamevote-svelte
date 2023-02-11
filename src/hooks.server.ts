@@ -21,10 +21,3 @@ export async function handle({ event, resolve }: any) {
     locals.apiclient = new ApiClient(apiHost)
     return await resolve(event);
 }
-
-export async function handleFetch({request, fetch}: any) {
-    request.headers.set('Content-Type', 'application/json')
-    request.headers.set('Accept', 'application/json')
-    request = new Request("http://localhost:8080" + request.url, request)
-    return fetch(request)
-}
