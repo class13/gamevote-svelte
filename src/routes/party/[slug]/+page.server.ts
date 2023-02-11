@@ -48,10 +48,6 @@ export async function load({params, locals, cookies}: Params) {
     }
 }
 // todo: implement deletion of options
-// todo: implement starting of vote
-
-// todo: implement showing of poll
-
 // todo: implement a socket to connect to, to get a live option and attendee list
 // todo: include party in payload of jwt token (otherwise it might be used in another party)
 export const actions = {

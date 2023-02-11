@@ -12,10 +12,11 @@ export const actions = {
         let games = gamesString.split("\n");
         games = games.map(it => it.replace("\r", ""))
         games = games.map(it => it.trim())
+        games = games.filter(it => it !== "")
 
         let party = {
             attendees: [locals.username],
-            options: games // todo: prevent empty string
+            options: games
         }
         let result = await locals.api.post("/parties", party) as {id: number}
 

@@ -13,7 +13,7 @@
         }
     }
 </script>
-<!-- TODO: create a "voting" and "results" component -->
+<!-- TODO: implement results -->
 <div class="nomination">
 <span>Hello {$page.data.username}</span>
 <div class="double-container">
