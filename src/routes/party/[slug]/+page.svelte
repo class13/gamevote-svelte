@@ -15,7 +15,8 @@
         }
     }
     Object.keys(statusButtons).forEach(it => {
-        statusButtons[it].selected = data.party.status == it.toUpperCase()
+        statusButtons[it].selected = data.party.status === it.toUpperCase()
+        statusButtons.results.disabled = data.party.status === "NOMINATION"
     })
 </script>
 
@@ -32,12 +33,13 @@
                     class:selected={statusButtons.voting.selected}>
                 Voting
             </button>
-            <button formaction="?/startResults"
-                    disabled="{statusButtons.results.disabled}"
-                    class:selected={statusButtons.results.selected}>
-                <!-- todo: bug: when clicking on results from votes it goes to nomination -->
-                Results
-            </button>
+            {#if !statusButtons.results.disabled}
+                <button formaction="?/startResults"
+                        class:selected={statusButtons.results.selected}>
+                    <!-- todo: bug: when clicking on results from votes it goes to nomination -->
+                    Results
+                </button>
+            {/if}
         </form>
     </div>
 

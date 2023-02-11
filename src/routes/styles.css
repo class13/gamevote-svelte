@@ -2,6 +2,12 @@ body {
     margin: 15px;
     background: #121212;
     color: darkgray;
+    font-family: MS Sans Serif, sans-serif;
+    font-size: 14px;
+}
+
+button {
+    font-family: MS Sans Serif, sans-serif;
 }
 
 main {
@@ -11,10 +17,10 @@ main {
 }
 
 header {
-    font-size: 35px;
+    font-size: 50px;
     text-align: center;
     margin-bottom: 15px;
-    font-family: "Arial Black", serif;
+    font-family: Copperplate, Copperplate Gothic Light, fantasy;
 }
 
 .glasspanel {
@@ -37,4 +43,15 @@ button {
 input {
     background: rgb(255, 255, 255, 15%);
     color: rgb(255, 255, 255, 60%);
+}
+
+header .bigletter {
+    font-size: 55px;
+}
+
+header .emoji {
+    font-size: 40px;
+    padding: 0px 20px;
+    text-align: center;
+    horiz-align: center;
 }

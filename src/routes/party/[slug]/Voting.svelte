@@ -14,7 +14,7 @@
 </script>
 <div class="voting">
     {#if $page.data.isUserVoting}
-        <form action="?/vote" method="POST">
+        <form action="?/vote" method="POST" class="glasspanel">
             <ul>
                 {#each options as option}
                     <li>
@@ -42,6 +42,10 @@
     {/if}
 </div>
 <style>
+    .voting {
+        display: flex;
+        justify-content: center;
+    }
     label {
         display: inline-block;
         background: rgb(255, 255, 255, 5%);
@@ -56,11 +60,16 @@
     input {
         display: none;
     }
+    form {
+        margin-left: auto;
+        margin-right: auto;
+        display: inline-block;
+        padding: 5px 30px;
+    }
     ul {
         display: table;
         list-style-type: none;
-        margin-left: auto;
-        margin-right: auto;
+
         padding-left: 0;
     }
     li {
@@ -71,6 +80,9 @@
         min-width: 150px;
         justify-content: center;
         padding: 10px 20px 10px 0px
+    }
+    button {
+        padding: 4px 20px;
     }
 
 

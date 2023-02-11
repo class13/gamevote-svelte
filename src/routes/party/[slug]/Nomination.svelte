@@ -16,7 +16,7 @@
 <div class="nomination">
 <div class="double-container">
     <div class="glasspanel">
-        Attendees
+        <h4>Attendees</h4>
         <ul>
             {#each $page.data.party.attendees as attendee}
                 <li>{attendee} {#if $page.data.username === attendee}(You){/if}</li>
@@ -24,7 +24,7 @@
         </ul>
     </div>
     <div class="glasspanel">
-        Options
+        <h4>Options</h4>
         <ul>
             {#each $page.data.party.options as option}
                 <li>{option}</li>
@@ -55,5 +55,10 @@
     li {
         display: block;
         padding: 5px 2px;
+    }
+    h4{
+        margin: 0;
+        font-size: 15px;
+        margin-top: 5px;
     }
 </style>
