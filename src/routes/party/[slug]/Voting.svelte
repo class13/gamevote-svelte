@@ -58,6 +58,10 @@
     }
     ul {
         display: table;
+        list-style-type: none;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0;
     }
     li {
         display: table-row;
@@ -66,6 +70,7 @@
         display: table-cell;
         min-width: 150px;
         justify-content: center;
+        padding: 10px 20px 10px 0px
     }
 
 

@@ -29,17 +29,17 @@
             {#each $page.data.party.options as option}
                 <li>{option}</li>
             {/each}
-            <form on:keydown={onKeydownAttendee} action="?/addOption" method="POST">
-                <input name="option" type="text" bind:value={option} bind:this={optionInput} autofocus >
-            </form>
+            <li>
+                <form on:keydown={onKeydownAttendee} action="?/addOption" method="POST">
+                    <input name="option" type="text" bind:value={option} bind:this={optionInput} autofocus >
+                </form>
+            </li>
+
         </ul>
     </div>
 </div>
 </div>
 <style>
-    .nomination {
-        min-width: 600px;
-    }
 
     .nomination > .title {
         text-align: center;
@@ -51,5 +51,13 @@
 
     .nomination .double-container div {
         flex: 1;
+    }
+    li {
+        display: block;
+        padding: 5px 2px;
+    }
+    li input {
+        background: rgb(255, 255, 255, 15%);
+        color: rgb(255, 255, 255, 60%);
     }
 </style>

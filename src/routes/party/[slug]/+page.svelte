@@ -20,7 +20,7 @@
 </script>
 
 <div class="party">
-    <div class="header">
+    <div class="header glasspanel">
         <form method="POST">
             <button formaction="?/startNomination"
                     disabled="{statusButtons.nomination.disabled}"
@@ -42,9 +42,9 @@
     </div>
 
     {#if data.party.status === "NOMINATION"}
-    <Nomination/>
+        <Nomination/>
     {:else if data.party.status === "VOTING"}
-    <Voting/>
+        <Voting/>
     {:else}
         <Result/>
     {/if}
@@ -56,5 +56,11 @@
     button.selected {
         border: 2px solid rgb(255, 255, 255, 20%);
         background: rgb(255, 255, 255, 5%);
+    }
+    .party {
+        min-width: 600px;
+    }
+    .header {
+        margin-bottom: 30px;
     }
 </style>
