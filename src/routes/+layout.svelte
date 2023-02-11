@@ -3,7 +3,6 @@
 </script>
 <header>
 	<span class="bigletter">G</span>AMEV<span class="circle"/>T<span class="bigletter">E</span>
-	<hr/>
 </header>
 <div class="app">
 	<main>
