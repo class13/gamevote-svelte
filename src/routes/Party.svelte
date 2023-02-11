@@ -2,7 +2,6 @@
     import { page } from '$app/stores';
 </script>
 <div class="party">
-    <h2 class="title">My LAN-Party</h2>
     <span>Hello {$page.data.username}</span>
     <div class="double-container">
         <div>

@@ -13,7 +13,6 @@
     })
 </script>
 <div class="voting">
-    <h2 class="title">My LAN-Party</h2>
     {#if $page.data.isUserVoting}
         <form action="?/vote" method="POST">
             <ul>
@@ -34,6 +33,11 @@
             <button type="submit">Vote</button>
         </form>
     {:else}
+        Waiting for:
+        {#each $page.data.outstanding as attendee}
+            <p>{attendee}</p>
+        {/each}
+
 
     {/if}
 </div>

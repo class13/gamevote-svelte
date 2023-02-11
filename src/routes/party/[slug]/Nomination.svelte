@@ -15,7 +15,6 @@
 </script>
 <!-- TODO: create a "voting" and "results" component -->
 <div class="nomination">
-<h2 class="title">My LAN-Party</h2>
 <span>Hello {$page.data.username}</span>
 <div class="double-container">
     <div>
