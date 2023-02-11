@@ -13,19 +13,17 @@
         }
     }
 </script>
-<!-- TODO: implement results -->
 <div class="nomination">
-<span>Hello {$page.data.username}</span>
 <div class="double-container">
-    <div>
+    <div class="glasspanel">
         Attendees
         <ul>
             {#each $page.data.party.attendees as attendee}
-                <li>{attendee}</li>
+                <li>{attendee} {#if $page.data.username === attendee}(You){/if}</li>
             {/each}
         </ul>
     </div>
-    <div>
+    <div class="glasspanel">
         Options
         <ul>
             {#each $page.data.party.options as option}
@@ -53,9 +51,5 @@
 
     .nomination .double-container div {
         flex: 1;
-        min-height: 30px;
-        box-shadow: 0px 2px 4px black;
-        color: white;
-        background-color: rgba(255, 255, 255, 0.05);
     }
 </style>
