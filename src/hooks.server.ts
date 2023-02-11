@@ -1,5 +1,6 @@
 import * as jose from "jose";
 import {error, redirect} from "@sveltejs/kit";
+import {ApiClient} from "./lib/apiclient/apiclient";
 
 type HypermediaContent = {
     "_links"?: {
@@ -11,47 +12,13 @@ type HypermediaContent = {
         [name: string]: () => Promise<any>
     }
 }
+export type Locals = {
+    apiclient: ApiClient
+}
 export async function handle({ event, resolve }: any) {
     const apiHost = "http://localhost:8080"
-
-    async function fletch(endpoint: string, method: string, payload?: any) {
-        let response = await fetch(`${apiHost}${endpoint}`, {
-            method: method,
-            body: JSON.stringify(payload),
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
-        if (response.status != 200) throw error(404, "Party not found")
-        return await response.json()
-    }
-    // todo: create types for those libs
-    event.locals.api = {
-        fetch: fletch,
-        get: async (endpoint: string) => {
-            return await fletch(endpoint, 'GET')
-        },
-        post: async (endpoint: string, payload: any) => {
-            return await fletch(endpoint, 'POST', payload)
-        },
-        patch: async (endpoint: string, payload: any) => {
-            return await fletch(endpoint, 'PATCH', payload)
-        },
-        put: async (endpoint: string, payload: any) => {
-            return await fletch(endpoint, 'PUT', payload)
-        },
-    }
-    event.locals.hypermedia = {
-        hydrate: (data: HypermediaContent) => {
-            if (data._links == null) return {}
-            return Object.fromEntries(
-                Object.entries(data._links).map(it => {
-                    return [it[0], () => event.locals.api.get(it[1].href)]
-                })
-            )
-        }
-    }
+    const locals = event.locals as Locals
+    locals.apiclient = new ApiClient(apiHost)
     return await resolve(event);
 }
 

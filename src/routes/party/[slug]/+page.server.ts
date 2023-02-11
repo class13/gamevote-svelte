@@ -1,10 +1,14 @@
 import {redirect} from "@sveltejs/kit";
 import * as jose from 'jose'
+import type {Locals} from "../../../hooks.server";
 
+type PartyLocals = Locals & {
+    username: string
+}
 type Params = {
     params: {slug: number},
     request: any,
-    locals: {api: any, username: string, hypermedia: any},
+    locals: PartyLocals,
 
     cookies: any
 }
@@ -22,8 +26,8 @@ async function loadUsername(cookies: any, partyId: number) {
     return payload.username
 }
 
-async function getParty(locals: any, params: any) {
-    return await locals.api.get(`/parties/${params.slug}`)
+async function getParty(locals: Locals, params: any) {
+    return await locals.apiclient.get(`/parties/${params.slug}`)
 }
 export async function load({params, locals, cookies}: Params) {
     let response: any = {}
@@ -32,14 +36,14 @@ export async function load({params, locals, cookies}: Params) {
     locals.username = username
     if (party["_links"] && party["_links"].poll) {
         let pollHref = party["_links"].poll.href
-        let poll = await locals.api.get(pollHref)
+        let poll = await locals.apiclient.get(pollHref)
         let outstandingHref = poll["_links"] && poll["_links"].outstanding.href
-        let outstanding = await locals.api.get(outstandingHref)
+        let outstanding = await locals.apiclient.get(outstandingHref)
         response.poll = poll
         response.outstanding = outstanding
         response.isUserVoting = outstanding.includes(username)
         console.log(poll)
-        let hydratedPoll = locals.hypermedia.hydrate(poll)
+        let hydratedPoll = await locals.apiclient.hydrateHypermedia(poll)
         console.log(hydratedPoll)
         if (hydratedPoll.results) {
             let results = await hydratedPoll.results()
@@ -66,19 +70,19 @@ export const actions = {
     addOption: async ({locals, params, request}: Params) => {
         let data = await request.formData()
         data = Object.fromEntries(data.entries())
-        await locals.api.post(`/parties/${params.slug}/options` , {value: data.option})
+        await locals.apiclient.post(`/parties/${params.slug}/options` , {value: data.option})
         throw redirect(302, `/party/${params.slug}`)
     },
     startVoting: async ({locals, params}: Params) => {
-        await locals.api.patch(`/parties/${params.slug}` , {status: "VOTING"})
+        await locals.apiclient.patch(`/parties/${params.slug}` , {status: "VOTING"})
         throw redirect(302, `/party/${params.slug}`)
     },
     startNomination: async ({locals, params}: Params) => {
-        await locals.api.patch(`/parties/${params.slug}` , {status: "NOMINATION"})
+        await locals.apiclient.patch(`/parties/${params.slug}` , {status: "NOMINATION"})
         throw redirect(302, `/party/${params.slug}`)
     },
     startResults: async ({locals, params}: Params) => {
-        await locals.api.patch(`/parties/${params.slug}` , {status: "RESULTS"})
+        await locals.apiclient.patch(`/parties/${params.slug}` , {status: "RESULTS"})
         throw redirect(302, `/party/${params.slug}`)
     },
     vote: async ({locals, params, request, cookies}: Params) => {
@@ -99,7 +103,7 @@ export const actions = {
         let username = await loadUsername(cookies, params.slug)
         let party = await getParty(locals, params)
         let pollLink = party["_links"].poll.href
-        let response = await locals.api.put(`${pollLink}/votes/${username}`, data);
+        let response = await locals.apiclient.put(`${pollLink}/votes/${username}`, data);
         console.log(response)
         throw redirect(302, `/party/${params.slug}`)
     }
