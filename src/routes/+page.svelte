@@ -1,10 +1,4 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
-	import Party from './Party.svelte'
-
-
 </script>
 
 <svelte:head>
@@ -12,17 +6,30 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<h1>GAMEVOTE</h1>
-
-	<Party />
-</section>
+<form action="?/createparty" method="POST">
+	<div class="wrapper">
+		<button type="submit">New Lobby</button>
+	</div>
+</form>
 
 <style>
-	section {
+	form {
 		display: flex;
-		flex-direction: column;
-		flex: 0.6;
+		height: 100%;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.wrapper {
+		padding-bottom: 100px;
+	}
+	button {
+		padding: 10px 30px;
+		border: 1px solid rgb(0, 0, 0, 70%);
+	}
+	button:hover {
+		background: rgb(255, 255, 255, 15%);
+		border: 1px solid rgb(0, 0, 0, 40%);
 	}
 
 	h1 {

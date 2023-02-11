@@ -1,5 +1,5 @@
 import * as jose from "jose";
-import {redirect} from "@sveltejs/kit";
+import {error, redirect} from "@sveltejs/kit";
 
 type HypermediaContent = {
     "_links"?: {
@@ -23,6 +23,7 @@ export async function handle({ event, resolve }: any) {
                 'Accept': 'application/json'
             }
         });
+        if (response.status != 200) throw error(404, "Party not found")
         return await response.json()
     }
     // todo: create types for those libs

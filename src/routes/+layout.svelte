@@ -13,4 +13,7 @@
 </div>
 
 <style>
+	.page {
+		min-width: 600px;
+	}
 </style>

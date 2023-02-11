@@ -56,8 +56,4 @@
         display: block;
         padding: 5px 2px;
     }
-    li input {
-        background: rgb(255, 255, 255, 15%);
-        color: rgb(255, 255, 255, 60%);
-    }
 </style>
