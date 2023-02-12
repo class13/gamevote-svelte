@@ -1,22 +1,23 @@
 import {redirect} from "@sveltejs/kit";
 import * as jose from 'jose'
 import type {Locals} from "../../../hooks.server";
+import { BASE_URL } from '$env/static/private'
 
 type PartyLocals = Locals & {
     username: string
 }
 type Params = {
-    params: {slug: number},
+    params: {slug: string},
     request: any,
     locals: PartyLocals,
 
     cookies: any
 }
 // todo: if not found go to create
-async function loadUsername(cookies: any, partyId: number) {
-    let usertoken = cookies.get(`usertoken_${partyId}`);
+async function loadUsername(cookies: any, partyCode: string) {
+    let usertoken = cookies.get(`usertoken_${partyCode}`);
     if (!usertoken) {
-        throw redirect(302, `/party/${partyId}/register`)
+        throw redirect(302, `/party/${partyCode}/register`)
     }
     const jwtSecret = process.env.JWT_SECRET;
     let secret = new TextEncoder().encode(jwtSecret);
@@ -32,7 +33,7 @@ async function getParty(locals: Locals, params: any) {
 export async function load({params, locals, cookies}: Params) {
     let response: any = {}
     let party = await getParty(locals, params)
-    let username = await loadUsername(cookies, party.id)
+    let username = await loadUsername(cookies, party.code)
     locals.username = username
     if (party["_links"] && party["_links"].poll) {
         let pollHref = party["_links"].poll.href
@@ -60,7 +61,8 @@ export async function load({params, locals, cookies}: Params) {
     return {
         party: party,
         username: username,
-        ...response
+        ...response,
+        baseUrl: BASE_URL
     }
 }
 // todo: implement deletion of options

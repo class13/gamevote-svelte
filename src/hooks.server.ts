@@ -1,6 +1,7 @@
 import * as jose from "jose";
 import {error, redirect} from "@sveltejs/kit";
 import {ApiClient} from "./lib/apiclient/apiclient";
+import {API_HOST} from "$env/static/private";
 
 type HypermediaContent = {
     "_links"?: {
@@ -16,7 +17,7 @@ export type Locals = {
     apiclient: ApiClient
 }
 export async function handle({ event, resolve }: any) {
-    const apiHost = "http://localhost:8080"
+    const apiHost = API_HOST
     const locals = event.locals as Locals
     locals.apiclient = new ApiClient(apiHost)
     return await resolve(event);

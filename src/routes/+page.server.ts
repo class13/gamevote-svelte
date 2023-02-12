@@ -6,6 +6,6 @@ import type {Locals} from "../hooks.server";
 export const actions = {
     createparty: async function({locals}: {locals: Locals}) {
         let party = await locals.apiclient.post("/parties", {})
-        throw redirect(302, `/party/${party.id}`)
+        throw redirect(302, `/party/${party.code}`)
     }
 }

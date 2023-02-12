@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import Nomination from "./Nomination.svelte";
     import Voting from "./Voting.svelte";
     import Result from "./Result.svelte";
@@ -18,14 +18,60 @@
         statusButtons[it].selected = data.party.status === it.toUpperCase()
         statusButtons.results.disabled = data.party.status === "NOMINATION"
     })
+    export let popup = null
+    export let timeout
+    function showPopup(text: String) {
+        popup = text
+        if (timeout != null) clearTimeout(timeout)
+        timeout = setTimeout(() => popup = null, 2000);
+    }
+    export async function copyCodeToClipboard() {
+        let baseUrl = data.baseUrl
+        await copyToClipboard(`${baseUrl}/party/${data.party.code}`)
+
+        showPopup("Link copied to clipboard!")
+    }
+
+    async function copyToClipboard(text) {
+        if (navigator.clipboard) {
+            // Use the modern Clipboard API if it's available
+            try {
+                await navigator.clipboard.writeText(text);
+                console.log("Text copied to clipboard");
+            } catch (error) {
+                console.error("Could not copy text: ", error);
+            }
+        } else {
+            // Use a fallback approach for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand("copy");
+                console.log("Text copied to clipboard");
+            } catch (error) {
+                console.error("Could not copy text: ", error);
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+    }
 </script>
 
 <div class="party">
     <div class="header">
         <div class="code">
-            <span>#5A8GDE</span>
-            <button>📋</button>
+            <span>{data.party.code}</span>
+            <button on:click={copyCodeToClipboard}>
+                📋
+            </button>
+            <div class="popup" class:hidden={popup == null}>{popup}</div>
         </div>
+
 
         <form method="POST">
             <button formaction="?/startNomination"
@@ -102,5 +148,13 @@
         font-size: 20px;
         line-height: 25px;
         border-radius: 0px;
+    }
+    .popup {
+        display: inline-block;
+        position: absolute;
+        color: rgb(255, 255, 255, 60%);
+        font-size: 14px;
+        margin-left: 320px;
+
     }
 </style>
