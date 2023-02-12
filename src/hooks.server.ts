@@ -16,7 +16,6 @@ export type Locals = {
     apiclient: ApiClient
 }
 export async function handle({ event, resolve }: any) {
-    console.log(JSON.stringify(process.env))
     const apiHost = process.env.API_HOST as string
     const locals = event.locals as Locals
     locals.apiclient = new ApiClient(apiHost)

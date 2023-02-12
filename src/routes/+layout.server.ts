@@ -3,7 +3,6 @@ import {redirect} from "@sveltejs/kit";
 import * as jose from "jose";
 import {getContext, setContext} from "svelte";
 import {ApiClient} from "../lib/apiclient/apiclient";
-import {JWT_SECRET} from "$env/static/private";
 
 export async function load(requestEvent: RequestEvent) {
     let cookies = requestEvent.cookies;
@@ -11,7 +10,7 @@ export async function load(requestEvent: RequestEvent) {
     if (userToken) {
         let userToken = cookies.get("userToken") as string
         const secret = new TextEncoder().encode(
-            JWT_SECRET
+            process.env.JWT_SECRET
         )
         const {payload} = await jose.jwtVerify(userToken, secret)
         requestEvent.locals = {username: payload.username}

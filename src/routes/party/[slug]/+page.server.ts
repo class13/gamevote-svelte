@@ -1,7 +1,6 @@
 import {redirect} from "@sveltejs/kit";
 import * as jose from 'jose'
 import type {Locals} from "../../../hooks.server";
-import { BASE_URL } from '$env/static/private'
 
 type PartyLocals = Locals & {
     username: string
