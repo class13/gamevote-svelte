@@ -1,4 +1,4 @@
-import {redirect} from "@sveltejs/kit";
+import {redirect, type Cookies} from "@sveltejs/kit";
 import * as jose from 'jose'
 import type {Locals} from "../../../hooks.server";
 
@@ -10,7 +10,7 @@ type Params = {
     request: any,
     locals: PartyLocals,
 
-    cookies: any
+    cookies: Cookies
 }
 // todo: if not found go to create
 async function loadUsername(cookies: any, partyCode: string) {

@@ -1,11 +1,11 @@
 import * as jose from "jose"
-import {redirect} from "@sveltejs/kit";
+import {redirect, type Cookies} from "@sveltejs/kit";
 import type {Locals} from "../../../../hooks.server";
 
 type RequestEvent = {
     params: any,
     locals: Locals,
-    cookies: any,
+    cookies: Cookies,
     request: any
 }
 export const actions = {
@@ -20,8 +20,8 @@ export const actions = {
             .setProtectedHeader({ alg: 'HS256' })
             .sign(secret)
 
-        cookies.set(`usertoken_${partyId}`, jwt)
-        let attendees = await locals.apiclient.post(`/parties/${params.slug}/attendees`, {value: data.username})
+        cookies.set(`usertoken_${partyId}`, jwt, {secure: process.env.COOKIES_SECURE !== 'false'})
+        await locals.apiclient.post(`/parties/${params.slug}/attendees`, {value: data.username})
         throw redirect(302, `/party/${partyId}`)
     }
 }
