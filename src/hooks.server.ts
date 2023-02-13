@@ -16,7 +16,7 @@ export type Locals = {
     apiclient: ApiClient
 }
 export async function handle({ event, resolve }: any) {
-    const apiHost = process.env.API_HOST as string
+    const apiHost = process.env.API_HOST as string || "http://localhost:8080"
     const locals = event.locals as Locals
     locals.apiclient = new ApiClient(apiHost)
     return await resolve(event);

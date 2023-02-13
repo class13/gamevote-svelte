@@ -117,9 +117,6 @@
         border: 2px solid rgb(255, 255, 255, 40%);
         background: rgb(255, 255, 255, 5%);
     }
-    .party {
-        min-width: 600px;
-    }
     .header {
         margin-bottom: 30px;
     }

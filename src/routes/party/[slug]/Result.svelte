@@ -9,6 +9,7 @@
             cssClass: it.votes == biggestVote ? "green" : (it.votes < 0 ? "red" : "white")
         }
     })
+    console.log(results)
 
 </script>
 <div class="results">

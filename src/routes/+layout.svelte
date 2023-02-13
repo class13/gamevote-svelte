@@ -16,6 +16,12 @@
 	.page {
 		min-width: 600px;
 	}
+	@media only screen and (max-width: 600px) {
+		.page {
+			width: 100%;
+			min-width: auto;
+		}
+	}
 	.circle {
 		content: url("/circle.png");
 		height: 45px;
