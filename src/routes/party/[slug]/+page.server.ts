@@ -61,7 +61,7 @@ export async function load({params, locals, cookies}: Params) {
         party: party,
         username: username,
         ...response,
-        baseUrl: BASE_URL
+        baseUrl: process.env.ORIGIN
     }
 }
 // todo: implement deletion of options
