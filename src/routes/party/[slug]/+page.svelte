@@ -37,7 +37,6 @@
             // Use the modern Clipboard API if it's available
             try {
                 await navigator.clipboard.writeText(text);
-                console.log("Text copied to clipboard");
             } catch (error) {
                 console.error("Could not copy text: ", error);
             }

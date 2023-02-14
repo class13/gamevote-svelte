@@ -42,9 +42,7 @@ export async function load({params, locals, cookies}: Params) {
         response.poll = poll
         response.outstanding = outstanding
         response.isUserVoting = outstanding.includes(username)
-        console.log(poll)
         let hydratedPoll = await locals.apiclient.hydrateHypermedia(poll)
-        console.log(hydratedPoll)
         if (hydratedPoll.results) {
             let results = await hydratedPoll.results()
             response.results = Object.entries(results).map(it => {
@@ -105,7 +103,6 @@ export const actions = {
         let party = await getParty(locals, params)
         let pollLink = party["_links"].poll.href
         let response = await locals.apiclient.put(`${pollLink}/votes/${username}`, data);
-        console.log(response)
         throw redirect(302, `/party/${params.slug}`)
     }
 }
