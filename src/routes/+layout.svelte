@@ -1,8 +1,13 @@
 <script>
 	import './styles.css';
+	export let subtitle = "Home"
 </script>
+<svelte:head>
+	<title>Gamevote - {subtitle}</title>
+	<meta name="description" content="Vote your Game!" />
+</svelte:head>
 <header>
-	<span class="bigletter">G</span>AMEV<span class="circle"/>T<span class="bigletter">E</span>
+	<img src="/logo.png" height="70px">
 </header>
 <div class="app">
 	<main>
