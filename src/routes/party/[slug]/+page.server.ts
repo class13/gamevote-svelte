@@ -54,6 +54,21 @@ export async function load({params, locals, cookies}: Params) {
         }
     }
 
+    let statusButtons = {
+        nomination: {
+        },
+        voting: {
+            disabled: false,
+        },
+        results: {
+            disabled: false
+        }
+    } as {[key: string]: {selected?: boolean, disabled?: boolean}}
+    Object.keys(statusButtons).forEach(it => {
+        statusButtons[it].selected = party.status === it.toUpperCase()
+        statusButtons.results.disabled = party.status === "NOMINATION"
+    })
+    response.statusButtons = statusButtons
 
     return {
         party: party,

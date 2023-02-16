@@ -2,22 +2,9 @@
     import Nomination from "./Nomination.svelte";
     import Voting from "./Voting.svelte";
     import Result from "./Result.svelte";
+    import {browser} from "$app/environment";
+    import {invalidateAll} from "$app/navigation";
     export let data
-
-    export let statusButtons = {
-        nomination: {
-        },
-        voting: {
-            disabled: false,
-        },
-        results: {
-            disabled: false
-        }
-    }
-    Object.keys(statusButtons).forEach(it => {
-        statusButtons[it].selected = data.party.status === it.toUpperCase()
-        statusButtons.results.disabled = data.party.status === "NOMINATION"
-    })
     export let popup = null
     export let timeout
     function showPopup(text: String) {
@@ -59,6 +46,13 @@
             }
         }
     }
+    if (browser) {
+        let asdf = () => {
+            invalidateAll()
+            setTimeout(asdf, 500)
+        }
+        setTimeout(asdf, 500)
+    }
 </script>
 
 <div class="party">
@@ -74,18 +68,18 @@
 
         <form method="POST">
             <button formaction="?/startNomination"
-                    disabled="{statusButtons.nomination.disabled}"
-                    class:selected={statusButtons.nomination.selected}>
+                    disabled="{data.statusButtons.nomination.disabled}"
+                    class:selected={data.statusButtons.nomination.selected}>
                 Nomination
             </button>
             <button formaction="?/startVoting"
-                    disabled="{statusButtons.voting.disabled}"
-                    class:selected={statusButtons.voting.selected}>
+                    disabled="{data.statusButtons.voting.disabled}"
+                    class:selected={data.statusButtons.voting.selected}>
                 Voting
             </button>
             <button formaction="?/startResults"
-                    class:hidden={statusButtons.results.disabled}
-                    class:selected={statusButtons.results.selected}>
+                    class:hidden={data.statusButtons.results.disabled}
+                    class:selected={data.statusButtons.results.selected}>
                 <!-- todo: bug: when clicking on results from votes it goes to nomination -->
                 Results
             </button>
