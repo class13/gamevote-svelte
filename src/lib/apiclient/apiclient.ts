@@ -22,8 +22,14 @@ export class ApiClient {
                 'Accept': 'application/json'
             }
         });
-        if (response.status != 200) throw error(404, "Party not found")
-        return await response.json()
+        if (response.status != 200
+        ) throw error(404, "Party not found")
+        let message = await response.text();
+        if (!message || message.length == 0) {
+            return null
+        }
+        return JSON.parse(message)
+
     }
     async get(endpoint: string) {
         return await this.fetch(endpoint, 'GET')
@@ -36,6 +42,9 @@ export class ApiClient {
     }
     async put(endpoint: string, payload: any) {
         return await this.fetch(endpoint, 'PUT', payload)
+    }
+    async delete(endpoint: string) {
+        return await this.fetch(endpoint, 'DELETE')
     }
     // in this case hydration means taking the hypermedia links
     // from a piece of content and turning them into functions to fetch the data from them

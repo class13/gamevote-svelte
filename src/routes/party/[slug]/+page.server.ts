@@ -81,6 +81,12 @@ export async function load({params, locals, cookies}: Params) {
 // todo: implement a socket to connect to, to get a live option and attendee list
 // todo: include party in payload of jwt token (otherwise it might be used in another party)
 export const actions = {
+    deleteOption: async ({locals, request, params}: Params) => {
+        let formData = Object.fromEntries((await request.formData()).entries());
+        let id = formData.id
+        await locals.apiclient.delete(`/parties/${params.slug}/options/${id}`)
+        throw redirect(302, `/party/${params.slug}`)
+    },
     addOption: async ({locals, params, request}: Params) => {
         let data = await request.formData()
         data = Object.fromEntries(data.entries())

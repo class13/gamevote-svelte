@@ -25,9 +25,15 @@
     </div>
     <div class="glasspanel">
         <h4>Options</h4>
-        <ul>
-            {#each $page.data.party.options as option}
-                <li>{option}</li>
+        <ul class="options">
+            {#each $page.data.party.options as option, index}
+                <li>
+                    <span>{option}</span>
+                    <form action="?/deleteOption" method="post">
+                        <input type="hidden" value={index} name="id"/>
+                        <button type="submit">🗑️</button>
+                    </form>
+                </li>
             {/each}
             <li>
                 <form on:keydown={onKeydownAttendee} action="?/addOption" method="POST">
@@ -60,5 +66,38 @@
         margin: 0;
         font-size: 15px;
         margin-top: 5px;
+    }
+    .options {
+        display: table;
+    }
+
+    .options li {
+        display: table-row;
+    }
+    .options li span{
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .options li form{
+        display: table-cell;
+    }
+    .options button {
+        display: inline-block;
+        background: none;
+        border: none;
+        box-shadow: none;
+        padding: 3px 4px 4px 3px;
+        border-radius: 50px;
+        border: 1px solid transparent;
+        vertical-align: top;
+    }
+    .options button:hover {
+        box-shadow: 0 0 5px maroon;
+        border-color: maroon;
+    }
+
+    .options form {
+        display: inline-block;
+        float: right;
     }
 </style>
