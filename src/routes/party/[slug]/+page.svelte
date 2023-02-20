@@ -64,6 +64,12 @@
             </button>
             <div class="popup" class:hidden={popup == null}>{popup}</div>
         </div>
+        <form action="?/addBeer" method="post">
+            <button type="submit">
+                {data.party.beerCount} 🍺
+            </button>
+        </form>
+
 
 
         <form method="POST">
@@ -146,5 +152,8 @@
         font-size: 14px;
         margin-left: 320px;
 
+    }
+    .beer-component {
+        display: inline-block;
     }
 </style>
