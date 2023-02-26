@@ -72,10 +72,11 @@
             </button>
             <div class="popup" class:hidden={popup == null}>{popup}</div>
         </div>
-        <form action="?/addBeer" method="post">
+        <form action="?/addBeer" method="post" class="beer-form">
             <button type="submit" on:mouseenter={enterHover} on:mouseleave={leaveHover}>
                 {data.party.beerCount} 🍺
             </button>
+            <a href="https://docs.google.com/spreadsheets/d/1VihgGCWKcQha8KXcgX4ZaPFwsEz-SZUs_db7xZAE8LI/edit?usp=sharing">?</a>
             <div class="glasspanel beer-rankings" class:shown={showRankings}>
                 {#each Object.entries(data.party.beerPerAttendee) as entry, i}
                     <div class:bold={i === 0}>
@@ -181,5 +182,8 @@
     }
     .bold {
         font-weight: bold;
+    }
+    .beer-form a {
+        color: darkgrey;
     }
 </style>
