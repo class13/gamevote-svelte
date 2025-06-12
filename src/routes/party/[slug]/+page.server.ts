@@ -125,5 +125,9 @@ export const actions = {
         let pollLink = party["_links"].poll.href
         let response = await locals.apiclient.put(`${pollLink}/votes/${username}`, data);
         throw redirect(302, `/party/${params.slug}`)
-    }
+    },
+    addBeer: async ({locals, params, cookies}: Params) => {
+        await locals.apiclient.post(`/parties/${params.slug}/beers`, {attendee: await loadUsername(cookies, params.slug)})
+        throw redirect(302, `/party/${params.slug}`)
+    },
 }

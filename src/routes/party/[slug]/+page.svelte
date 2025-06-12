@@ -18,6 +18,14 @@
 
         showPopup("Link copied to clipboard!")
     }
+    export let showRankings = false
+    export function enterHover() {
+        showRankings = true
+    }
+
+    export function leaveHover() {
+        showRankings = false
+    }
 
     async function copyToClipboard(text) {
         if (navigator.clipboard) {
@@ -64,6 +72,21 @@
             </button>
             <div class="popup" class:hidden={popup == null}>{popup}</div>
         </div>
+        <form action="?/addBeer" method="post" class="beer-form">
+            <button type="submit" on:mouseenter={enterHover} on:mouseleave={leaveHover}>
+                {data.party.beerCount} 🍺
+            </button>
+            <a href="https://docs.google.com/spreadsheets/d/1VihgGCWKcQha8KXcgX4ZaPFwsEz-SZUs_db7xZAE8LI/edit?usp=sharing">?</a>
+            <div class="glasspanel beer-rankings" class:shown={showRankings}>
+                {#each Object.entries(data.party.beerPerAttendee) as entry, i}
+                    <div class:bold={i === 0}>
+                        {entry[0]}: {entry[1]}
+                        {#if i === 0} 👑{/if}
+                    </div>
+                {/each}
+            </div>
+        </form>
+
 
 
         <form method="POST">
@@ -146,5 +169,21 @@
         font-size: 14px;
         margin-left: 320px;
 
+    }
+    .beer-component {
+        display: inline-block;
+    }
+    .beer-rankings {
+        position: absolute;
+        display: none;
+    }
+    .shown {
+        display: block;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    .beer-form a {
+        color: darkgrey;
     }
 </style>
