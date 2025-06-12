@@ -20,7 +20,10 @@ export const actions = {
             .setProtectedHeader({ alg: 'HS256' })
             .sign(secret)
 
-        cookies.set(`usertoken_${partyId}`, jwt, {secure: process.env.COOKIES_SECURE !== 'false'})
+        cookies.set(`usertoken_${partyId}`, jwt, {
+            secure: process.env.COOKIES_SECURE !== 'false',
+            maxAge: 60 * 60 * 24 * 365 * 10
+        })
         await locals.apiclient.post(`/parties/${params.slug}/attendees`, {value: data.username})
         throw redirect(302, `/party/${partyId}`)
     }
