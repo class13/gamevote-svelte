@@ -2,6 +2,7 @@
 	"name": "gamevote-svelte",
 	"version": "0.0.1",
 	"scripts": {
+		"start": "npm run build && npm run dev",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -23,6 +24,8 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/adapter-node": "^1.1.8",
+		"chart.js": "^4.4.9",
+		"chartjs-adapter-date-fns": "^3.0.0",
 		"dotenv": "^16.0.3",
 		"jose": "^4.11.4",
 		"winston": "^3.8.2"
