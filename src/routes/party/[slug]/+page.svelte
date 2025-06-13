@@ -87,7 +87,7 @@
             </div>
         </form>
 
-
+        <a href="/party/{data.party.code}/beer">Redirect to Beer Page</a>
 
         <form method="POST">
             <button formaction="?/startNomination"
