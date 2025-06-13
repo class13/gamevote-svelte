@@ -18,13 +18,13 @@
 
         showPopup("Link copied to clipboard!")
     }
-    export let showRankings = false
+    export let showRankings = true
     export function enterHover() {
         showRankings = true
     }
 
     export function leaveHover() {
-        showRankings = false
+        showRankings = true
     }
 
     async function copyToClipboard(text) {
