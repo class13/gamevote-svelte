@@ -22,7 +22,8 @@ export const actions = {
 
         cookies.set(`usertoken_${partyId}`, jwt, {
             secure: process.env.COOKIES_SECURE !== 'false',
-            maxAge: 60 * 60 * 24 * 365 * 10
+            maxAge: 60 * 60 * 24 * 365 * 10,
+            path: "/"
         })
         await locals.apiclient.post(`/parties/${params.slug}/attendees`, {value: data.username})
         throw redirect(302, `/party/${partyId}`)
