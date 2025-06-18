@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 body {
     margin: 15px;
     background: #121212;
@@ -23,20 +25,14 @@ header {
     font-family: Copperplate, Copperplate Gothic Light, fantasy;
 }
 
+header img {
+    max-height: 70px;
+}
+
 .glasspanel {
     background: rgb(255, 255, 255, 5%);
     padding: 1%;
     border-radius: 3px;
-    box-shadow: 0px 1px 3px rgb(255, 255, 255, 10%);
-}
-
-button {
-    background: rgb(255, 255, 255, 20%);
-    border: none;
-    border-radius: 3px;
-    color: rgb(255, 255, 255, 60%);
-    padding: 3px 6px;
-    margin-bottom: 5px;
     box-shadow: 0px 1px 3px rgb(255, 255, 255, 10%);
 }
 

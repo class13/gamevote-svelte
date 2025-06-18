@@ -2,45 +2,37 @@
     export let data;
 </script>
 
-<div class="beer">
-    <form action="?/addBeer" method="post" class="beer-for">
-        <button type="submit">
-            <img src="/beer.png" alt="asdf" />
+<div class="">
+    <form action="?/addBeer" method="post" class="flex justify-center py-10">
+        <div></div>
+        <button type="submit" class="bg-neutral-600 hover:bg-neutral-700 rounded-xl p-2 px-5 text-7xl ring shadow-xl/30 hover:shadow-xl/10">
+            {data.party.beerCount}🍺
         </button>
     </form>
-    <hr>
-    <a
-        href="https://docs.google.com/spreadsheets/d/1VihgGCWKcQha8KXcgX4ZaPFwsEz-SZUs_db7xZAE8LI/edit?usp=sharing"
-        >?</a
-    >
-    <hr>
-    <div class="glasspanel beer-rankings">
-        {#each Object.entries(data.party.beerPerAttendee) as entry, i}
-            <div class:bold={i === 0}>
-                {entry[0]}: {entry[1]}
-                {#if i === 0}
-                    👑{/if}
-            </div>
-        {/each}
+    <div class="text-xl">Scores</div>
+    <div class="glasspanel flex justify-center">
+        <table class="table-auto">
+            <tbody>
+                {#each Object.entries(data.party.beerPerAttendee) as entry, i}
+                    <tr class:font-bold={i === 0}>
+                        <td class="px-1">{entry[0]}:</td>
+                        <td class="px-1">
+                            {entry[1]}
+                            {#if i === 0}👑{/if}
+                        </td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-10 flex justify-center">
+    <a class="underline text-blue-600"
+       href="https://docs.google.com/spreadsheets/d/1VihgGCWKcQha8KXcgX4ZaPFwsEz-SZUs_db7xZAE8LI/edit?usp=sharing">
+        Conversion Info
+    </a>
     </div>
 </div>
 
 <style>
-    .beer-for {
-        display: flex;
-        justify-content: center;
-        height: 50vh;
-    }
-    .beer-for img {
-        width: 100%;
-        height: 100%;
-    }
-    .beer-for button {
-        flex-grow: 1;
-    }
-    hr {
-        border-color: black;
-        margin-top: 1em;
-        margin-bottom: 1em;
-    }
+
 </style>

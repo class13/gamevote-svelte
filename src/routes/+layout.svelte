@@ -6,7 +6,7 @@
 	<title>Gamevote - {subtitle}</title>
 	<meta name="description" content="Vote your Game!" />
 </svelte:head>
-<header>
+<header class="flex justify-center">
 	<img src="/logo.png" height="70px">
 </header>
 <div class="app">
