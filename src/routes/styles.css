@@ -8,10 +8,6 @@ body {
     font-size: 14px;
 }
 
-button {
-    font-family: MS Sans Serif, sans-serif;
-}
-
 main {
     display: flex;
     justify-content: center;
@@ -50,4 +46,17 @@ header .emoji {
     padding: 0px 20px;
     text-align: center;
     horiz-align: center;
+}
+
+a {
+    @apply text-blue-500 hover:text-blue-700 underline
+
+}
+
+.link-list {
+    @apply flex flex-col justify-center items-center
+}
+
+button {
+    @apply bg-neutral-700 rounded-sm px-2 border-neutral-600
 }

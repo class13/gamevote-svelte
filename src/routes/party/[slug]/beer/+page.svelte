@@ -25,10 +25,14 @@
             </tbody>
         </table>
     </div>
-    <div class="mt-10 flex justify-center">
-    <a class="underline text-blue-600"
+    <div class="mt-30 link-list">
+    <a
        href="https://docs.google.com/spreadsheets/d/1VihgGCWKcQha8KXcgX4ZaPFwsEz-SZUs_db7xZAE8LI/edit?usp=sharing">
         Conversion Info
+    </a>
+    <a
+       href="/party/{data.party.code}">
+        Back to Party
     </a>
     </div>
 </div>

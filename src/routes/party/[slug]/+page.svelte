@@ -18,13 +18,13 @@
 
         showPopup("Link copied to clipboard!")
     }
-    export let showRankings = true
+    export let showRankings = false
     export function enterHover() {
         showRankings = true
     }
 
     export function leaveHover() {
-        showRankings = true
+        showRankings = false
     }
 
     async function copyToClipboard(text) {
@@ -86,9 +86,6 @@
                 {/each}
             </div>
         </form>
-
-        <a href="/party/{data.party.code}/beer">Redirect to Beer Page</a>
-
         <form method="POST">
             <button formaction="?/startNomination"
                     disabled="{data.statusButtons.nomination.disabled}"
@@ -116,6 +113,9 @@
     {:else}
         <Result/>
     {/if}
+    <div class="mt-30 link-list">
+        <a href="/party/{data.party.code}/beer">Beer Page</a>
+    </div>
 </div>
 <style>
     .header {
