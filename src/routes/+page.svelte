@@ -1,7 +1,7 @@
 
 <form action="?/createparty" method="POST">
 	<div class="wrapper">
-		<button type="submit">New Lobby</button>
+		<button class="bg-color-blue-200" type="submit">New Lobby</button>
 	</div>
 </form>
 
