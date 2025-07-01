@@ -68,9 +68,12 @@
                     scales: {
                         x: {
                             type: 'time',
-                            min: new Date("2025-07-01T07:00"),  // ⬅️ ensure visible range
-                            max: new Date("2025-07-03T13:00"),
-                            stacked: true
+                            stacked: true,
+                            time: {
+                                displayFormats: {
+                                    hour: 'EEE HH:mm'
+                                }
+                            },
                         },
                         y: {
                             beginAtZero: true,
