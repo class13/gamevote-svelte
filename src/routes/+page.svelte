@@ -1,4 +1,3 @@
-<!--
 <form action="?/createparty" method="POST">
 	<div class="wrapper">
 		<button class="bg-color-blue-200" type="submit">New Lobby</button>
@@ -45,8 +44,3 @@
 		display: block;
 	}
 </style>
--->
-<script lang="ts">
-	import BeerStatistic from "./BeerStatistic.svelte";
-</script>
-<BeerStatistic/>

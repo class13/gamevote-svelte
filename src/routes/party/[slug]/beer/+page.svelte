@@ -1,18 +1,21 @@
 <script lang="ts">
-    export let data;
+    let props = $props()
+    let data = $state(props.data)
     import { onMount, onDestroy } from "svelte";
     import { Chart, registerables } from "chart.js";
     import type { ChartConfiguration } from "chart.js"; // ✅ Import type only!
-    import "chartjs-adapter-date-fns";
+    import BeerStatistic from "./BeerStatistic.svelte";
 
+    import "chartjs-adapter-date-fns";
     let canvas: HTMLCanvasElement | null = null;
     let chart: Chart | null = null;
     let startDate: Date = new Date();
     startDate.setHours(0, 0);
     let endDate: Date = new Date();
-    endDate.setHours(23, 59);
 
+    endDate.setHours(23, 59);
     let startDateText = startDate.toISOString().split("T")[0];
+
     let endDateText = endDate.toISOString().split("T")[0];
 
     function transformData(
@@ -37,6 +40,12 @@
             });
             return { person, points };
         });
+    }
+
+    type Response = {
+        [attendee: string]: {
+            [hour: string]: number
+        }
     }
 
     function setupChart(chartData: any) {
@@ -75,6 +84,8 @@
 
             chart = new Chart(canvas.getContext("2d")!, config);
         }
+
+        let showChart = $state(new Set(Object.values(data.beerSummary as Response).flatMap((it) => {return Object.keys(it)})).size > 1)
     }
 
     function updateChart(chartData: any) {
@@ -95,7 +106,6 @@
         const chartData = transformData(data.party.beerChartData);
         setupChart(chartData);
     });
-
     function change() {
         startDate = new Date(startDateText);
         endDate = new Date(endDateText);
@@ -104,58 +114,63 @@
         const chartData = transformData(data.party.beerChartData);
         updateChart(chartData);
     }
+
     onDestroy(() => {
         chart?.destroy();
     });
-
     // Simple random color generator for datasets
+
     function randomColor(): string {
         return `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
     }
+
+    let hours = new Set(Object.values(data.beerSummary as Response).flatMap(it => Object.keys(it)))
+    let showChart = $state(
+        hours.size > 1
+    )
 </script>
 
-<div class="beer">
-    <form action="?/addBeer" method="post" class="beer-for">
-        <button type="submit">
-            <img src="/beer.png" alt="asdf" />
+<div class="">
+    <form action="?/addBeer" method="post" class="flex justify-center py-10">
+        <div></div>
+        <button type="submit" class="bg-neutral-600 hover:bg-neutral-700 rounded-xl p-2 px-5 text-7xl ring shadow-xl/30 hover:shadow-xl/10">
+            {data.party.beerCount}🍺
         </button>
     </form>
-    <hr />
+    <div class="text-xl">Scores</div>
+    <div class="glasspanel flex justify-center mb-10">
+        <table class="table-auto">
+            <tbody>
+                {#each Object.entries(data.party.beerPerAttendee) as entry, i}
+                    <tr class:font-bold={i === 0}>
+                        <td class="px-1">{entry[0]}:</td>
+                        <td class="px-1">
+                            {entry[1]}
+                            {#if i === 0}👑{/if}
+                        </td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    {#if showChart}
     <div>
-        Beer Count: {data.party.beerCount}
-        <a
-            href="https://docs.google.com/spreadsheets/d/1VihgGCWKcQha8KXcgX4ZaPFwsEz-SZUs_db7xZAE8LI/edit?usp=sharing"
-            >?</a
-        >
+        <div class="text-xl">Chart</div>
+        <BeerStatistic beerSummary={data.beerSummary} />
     </div>
-    <hr />
-    <div class="glasspanel beer-rankings">
-        {#each Object.entries(data.party.beerPerAttendee) as entry, i}
-            <div class:bold={i === 0}>
-                {entry[0]}: {entry[1]}
-                {#if i === 0}
-                    👑{/if}
-            </div>
-        {/each}
+    {/if}
+    <div class="mt-30 link-list">
+    <a
+       href="https://docs.google.com/spreadsheets/d/1VihgGCWKcQha8KXcgX4ZaPFwsEz-SZUs_db7xZAE8LI/edit?usp=sharing">
+        Conversion Info
+    </a>
+    <a
+       href="/party/{data.party.code}">
+        Back to Party
+    </a>
     </div>
 </div>
 
-<div class="date-picker">
-    <label>
-        <input type="date" bind:value={startDateText} on:change={change} />
-    </label>
-
-    <label>
-        <input
-            type="date"
-            bind:value={endDateText}
-            min={startDateText}
-            on:change={change}
-        />
-    </label>
-</div>
-
-<canvas bind:this={canvas} width="400" height="200"></canvas>
 
 <style>
     .beer {

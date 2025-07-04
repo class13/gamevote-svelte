@@ -1,6 +1,7 @@
 import * as jose from "jose"
 import { redirect, type Cookies } from "@sveltejs/kit";
 import { Locals } from "../../../../hooks.server";
+import Result from "../Result.svelte";
 
 type PartyLocals = Locals & {
     username: string
@@ -30,12 +31,12 @@ async function getParty(locals: Locals, params: any) {
     return await locals.apiclient.get(`/parties/${params.slug}`)
 }
 export async function load({ params, locals, cookies }: Params) {
-    let response: any = {}
     let party = await getParty(locals, params)
 
     return {
         party: party,
-        baseUrl: process.env.ORIGIN
+        baseUrl: process.env.ORIGIN,
+        beerSummary: await locals.apiclient.get(`/parties/${params.slug}/beers/summary`)
     }
 }
 export const actions = {

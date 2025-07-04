@@ -3,25 +3,14 @@
     import 'chartjs-adapter-date-fns';
     import { onMount } from 'svelte';
 
+
     let canvas: HTMLCanvasElement | null = null;
     let chart: Chart | null = null;
-    let { partyId } = $props() as { partyId: number }
+    let { partyId, beerSummary } = $props() as { partyId: number, beerSummary: Response }
 
     type Response = {
         [attendee: string]: {
             [hour: string]: number
-        }
-    }
-
-    // todo: fetch from api
-    // todo: develop api
-    let sampleResponse: Response = {
-        "lukas": {
-            "2025-07-01T08:00": 2,
-            "2025-07-01T14:00": 2
-        },
-        "dominik": {
-            "2025-07-01T14:00": 13
         }
     }
 
@@ -54,6 +43,16 @@
         return datasets
     }
 
+    function min(response: Response) {
+        let dates = Object.entries(response).flatMap(it => Object.keys(it[1]))
+        return dates.sort()[0]
+    }
+
+    function max(response: Response) {
+        let dates = Object.entries(response).flatMap(it => Object.keys(it[1]))
+        return dates.sort()[dates.length - 1]
+    }
+
     onMount(() => {
         Chart.register(...registerables);
 
@@ -62,9 +61,10 @@
             const config: ChartConfiguration<'bar'> = {
                 type: 'bar',
                 data: {
-                    datasets: toChartJSData(sampleResponse)
+                    datasets: toChartJSData(beerSummary)
                 },
                 options: {
+                    animation: false,
                     scales: {
                         x: {
                             type: 'time',
@@ -72,8 +72,11 @@
                             time: {
                                 displayFormats: {
                                     hour: 'EEE HH:mm'
-                                }
+                                },
+                                unit: 'hour'
                             },
+                            min: min(beerSummary),
+                            max: max(beerSummary)
                         },
                         y: {
                             beginAtZero: true,
