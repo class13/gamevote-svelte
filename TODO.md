@@ -1,1 +1,3 @@
 - [ ] implement github pipeline to publish docker image
+- [ ] add .nvmrc
+- [ ] fix table names (currently has entity postfix)

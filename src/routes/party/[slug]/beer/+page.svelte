@@ -1,133 +1,19 @@
 <script lang="ts">
-    let props = $props()
-    let data = $state(props.data)
-    import { onMount, onDestroy } from "svelte";
-    import { Chart, registerables } from "chart.js";
-    import type { ChartConfiguration } from "chart.js"; // ✅ Import type only!
+    import BeerCumulativeStatistic from "./BeerCumulativeStatistic.svelte";
     import BeerStatistic from "./BeerStatistic.svelte";
 
-    import "chartjs-adapter-date-fns";
-    let canvas: HTMLCanvasElement | null = null;
-    let chart: Chart | null = null;
-    let startDate: Date = new Date();
-    startDate.setHours(0, 0);
-    let endDate: Date = new Date();
-
-    endDate.setHours(23, 59);
-    let startDateText = startDate.toISOString().split("T")[0];
-
-    let endDateText = endDate.toISOString().split("T")[0];
-
-    function transformData(
-        data: Record<string, string[]>,
-    ): { person: string; points: { x: string; y: number }[] }[] {
-        return Object.entries(data).map(([person, timestamps]) => {
-            const countMap = new Map<string, number>();
-            for (const ts of timestamps) {
-                const date = new Date(ts);
-                if (date >= startDate && date <= endDate) {
-                    countMap.set(ts, (countMap.get(ts) || 0) + 1);
-                }
-            }
-            const sorted = Array.from(countMap.entries()).sort((a, b) =>
-                a[0].localeCompare(b[0]),
-            );
-
-            let cumulative = 0;
-            const points = sorted.map(([x, y]) => {
-                cumulative += y;
-                return { x, y: cumulative };
-            });
-            return { person, points };
-        });
-    }
+    let props = $props();
+    let data = $state(props.data);
 
     type Response = {
         [attendee: string]: {
             [hour: string]: number
         }
+    };
+
+    function hasHourlyData(summary: Response): boolean {
+        return Object.values(summary).some((hours) => Object.keys(hours).length > 0);
     }
-
-    function setupChart(chartData: any) {
-        Chart.register(...registerables);
-        if (canvas) {
-            const config: ChartConfiguration<"line"> = {
-                type: "line",
-                data: {
-                    datasets: chartData.map((personData: any) => ({
-                        label: personData.person,
-                        data: personData.points,
-                        borderColor: randomColor(),
-                        backgroundColor: "transparent",
-                        fill: false,
-                        tension: 0.9,
-                    })),
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: "Beer Drinking Chart",
-                        },
-                    },
-                    scales: {
-                        x: {
-                            type: "timeseries",
-                        },
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            };
-
-            chart = new Chart(canvas.getContext("2d")!, config);
-        }
-
-        let showChart = $state(new Set(Object.values(data.beerSummary as Response).flatMap((it) => {return Object.keys(it)})).size > 1)
-    }
-
-    function updateChart(chartData: any) {
-        if (chart) {
-            chart.data.datasets = chartData.map((personData: any) => ({
-                label: personData.person,
-                data: personData.points,
-                borderColor: randomColor(),
-                backgroundColor: "transparent",
-                fill: false,
-                tension: 0.9,
-            }));
-            chart.update();
-        }
-    }
-
-    onMount(() => {
-        const chartData = transformData(data.party.beerChartData);
-        setupChart(chartData);
-    });
-    function change() {
-        startDate = new Date(startDateText);
-        endDate = new Date(endDateText);
-        startDate.setHours(0, 0);
-        endDate.setHours(23, 59);
-        const chartData = transformData(data.party.beerChartData);
-        updateChart(chartData);
-    }
-
-    onDestroy(() => {
-        chart?.destroy();
-    });
-    // Simple random color generator for datasets
-
-    function randomColor(): string {
-        return `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
-    }
-
-    let hours = new Set(Object.values(data.beerSummary as Response).flatMap(it => Object.keys(it)))
-    let showChart = $state(
-        hours.size > 1
-    )
 </script>
 
 <div class="">
@@ -153,9 +39,15 @@
             </tbody>
         </table>
     </div>
-    {#if showChart}
+    {#if hasHourlyData(data.beerCumulativeSummary as Response)}
+    <div class="mt-10">
+        <div class="text-xl">Cumulative Consumption</div>
+        <BeerCumulativeStatistic beerCumulativeSummary={data.beerCumulativeSummary} />
+    </div>
+    {/if}
+    {#if hasHourlyData(data.beerSummary as Response)}
     <div>
-        <div class="text-xl">Chart</div>
+        <div class="text-xl">Hourly Consumption</div>
         <BeerStatistic beerSummary={data.beerSummary} />
     </div>
     {/if}
