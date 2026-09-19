@@ -1,9 +1,10 @@
 <script lang="ts">
     import BeerCumulativeStatistic from "./BeerCumulativeStatistic.svelte";
     import BeerStatistic from "./BeerStatistic.svelte";
+    import PromilleStatistic from "./PromilleStatistic.svelte";
 
     let props = $props();
-    let data = $state(props.data);
+    let data: any = $state(props.data);
 
     type Response = {
         [attendee: string]: {
@@ -13,6 +14,11 @@
 
     function hasHourlyData(summary: Response): boolean {
         return Object.values(summary).some((hours) => Object.keys(hours).length > 0);
+    }
+
+    function latestEstimate(hours: Record<string, number>): number {
+        const values = Object.values(hours);
+        return values.length > 0 ? values[values.length - 1] : 0;
     }
 </script>
 
@@ -38,6 +44,30 @@
                 {/each}
             </tbody>
         </table>
+    </div>
+    <div class="mt-10">
+        <div class="text-xl">Estimated blood alcohol</div>
+        <p class="text-sm opacity-80 mb-3">
+            A rough estimate in ‰ based on the tracked beers. It is not a measurement and must not be used to decide whether it is safe or legal to drive.
+        </p>
+        <div class="glasspanel mb-4">
+            <table class="table-auto">
+                <tbody>
+                    {#each Object.entries(data.promilleSummary.estimates) as entry}
+                        <tr>
+                            <td class="px-1">{entry[0]}:</td>
+                            <td class="px-1">{latestEstimate(entry[1] as Record<string, number>).toFixed(2)}‰</td>
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        </div>
+        {#if hasHourlyData(data.promilleSummary.estimates as Response)}
+            <PromilleStatistic estimates={data.promilleSummary.estimates} />
+        {/if}
+        <p class="text-xs opacity-70 mt-2">
+            Defaults: {data.promilleSummary.assumptions.bodyWeightKg} kg, {data.promilleSummary.assumptions.beerVolumeMl} ml beer at {(data.promilleSummary.assumptions.beerAlcoholByVolume * 100).toFixed(0)}% ABV, {data.promilleSummary.assumptions.alcoholEliminationPerHour.toFixed(2)}‰ eliminated per hour.
+        </p>
     </div>
     {#if hasHourlyData(data.beerCumulativeSummary as Response)}
     <div class="mt-10">
