@@ -3,6 +3,7 @@
     import "chartjs-adapter-date-fns";
     import { onDestroy, onMount } from "svelte";
     import { colorForAttendee } from "./chartColors";
+    import { chartLineStyles } from "./chartLineStyles";
 
     type Response = Record<string, Record<string, number>>;
     type DataEntry = { x: number, y: number };
@@ -17,8 +18,9 @@
 
     function toChartJSData(response: Response): ChartDataset<"line">[] {
         const attendees = Object.keys(response);
-        return Object.entries(response).map(([attendee, hours]) => {
+        return Object.entries(response).map(([attendee, hours], index) => {
             const color = colorForAttendee(attendee, attendees);
+            const lineStyle = chartLineStyles[index % chartLineStyles.length];
             return {
                 label: attendee,
                 data: Object.entries(hours).map(([hour, promille]) => ({
@@ -28,8 +30,11 @@
                 parsing: false,
                 borderColor: color,
                 backgroundColor: color,
-                pointRadius: 3,
-                pointHoverRadius: 4,
+                borderDash: lineStyle.borderDash,
+                borderWidth: lineStyle.borderWidth,
+                pointStyle: lineStyle.pointStyle,
+                pointRadius: lineStyle.pointRadius,
+                pointHoverRadius: lineStyle.pointHoverRadius,
                 pointBorderWidth: 0,
                 tension: 0.2,
                 fill: false
@@ -49,7 +54,15 @@
                 animation: false,
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: true } },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 12
+                        }
+                    }
+                },
                 scales: {
                     x: {
                         type: "time",
@@ -75,5 +88,14 @@
 </div>
 
 <style>
-    .chart { height: 24rem; }
+    .chart {
+        height: 24rem;
+        max-width: 100%;
+    }
+
+    @media (max-width: 640px) {
+        .chart {
+            height: 20rem;
+        }
+    }
 </style>
