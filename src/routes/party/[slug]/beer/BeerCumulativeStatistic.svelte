@@ -3,7 +3,6 @@
     import "chartjs-adapter-date-fns";
     import { onDestroy, onMount } from "svelte";
     import { colorForAttendee } from "./chartColors";
-    import { chartLineStyles } from "./chartLineStyles";
 
     let canvas: HTMLCanvasElement | null = null;
     let chart: Chart | null = null;
@@ -18,9 +17,8 @@
 
     function toChartJSData(response: Response): ChartDataset<"line">[] {
         const attendees = Object.keys(response);
-        return Object.entries(response).map(([attendee, hours], index) => {
+        return Object.entries(response).map(([attendee, hours]) => {
             const color = colorForAttendee(attendee, attendees);
-            const lineStyle = chartLineStyles[index % chartLineStyles.length];
             return {
                 label: attendee,
                 data: Object.entries(hours).map(([hour, beerCount]) => {
@@ -32,11 +30,8 @@
                 parsing: false,
                 borderColor: color,
                 backgroundColor: color,
-                borderDash: lineStyle.borderDash,
-                borderWidth: lineStyle.borderWidth,
-                pointStyle: lineStyle.pointStyle,
-                pointRadius: lineStyle.pointRadius,
-                pointHoverRadius: lineStyle.pointHoverRadius,
+                pointRadius: 3,
+                pointHoverRadius: 4,
                 pointBorderWidth: 0,
                 tension: 0,
                 fill: false
@@ -77,7 +72,6 @@
                     legend: {
                         display: true,
                         labels: {
-                            usePointStyle: true,
                             boxWidth: 12
                         }
                     }
